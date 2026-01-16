@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools Development Times</title>
+  </head>
+  <body>
+    <h1>Tools Development Times</h1>
+    <p>This document outlines the time taken for the development of various tools in the project.</p>
+    <p>Tool development times are essential for project management and resource allocation.</p>
+    <table border="1">
+      <tr>
+        <th>Tool Name</th>
+        <th>Development Time (hours)</th>
+      </tr>
+      <tr>
+        <td>Tool A</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>Tool B</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td>Tool C</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>Tool D</td>
+        <td>20</td>
+      </tr>
+    </table>
+  </body>
+</html>
