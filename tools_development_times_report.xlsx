@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>AnishNagaanish</Author>
+  <LastAuthor>AnishNagaanish</LastAuthor>
+  <Created>2026-01-16T00:00:00Z</Created>
+  <Version>1.0</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9000</WindowHeight>
+  <WindowWidth>12000</WindowWidth>
+ </ExcelWorkbook>
+ <!-- Platform Summary sheet -->
+ <Worksheet ss:Name="Platform Summary">
+  <Table>
+   <Row>
+    <Cell><Data ss:Type="String">Platform</Data></Cell>
+    <Cell><Data ss:Type="Number">Manual Time</Data></Cell>
+    <Cell><Data ss:Type="Number">Automation Time</Data></Cell>
+    <Cell><Data ss:Type="Number">Time Saved</Data></Cell>
+    <Cell><Data ss:Type="Number">Efficiency</Data></Cell>
+    <Cell><Data ss:Type="Number">Avg Dev+Test per tool</Data></Cell>
+    <Cell><Data ss:Type="Number">BreakEven Uses</Data></Cell>
+    <Cell><Data ss:Type="Number">Hours Saved per DevHour</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">AutoCAD LISP</Data></Cell>
+    <Cell><Data ss:Type="Number">39.67</Data></Cell>
+    <Cell><Data ss:Type="Number">12.72</Data></Cell>
+    <Cell><Data ss:Type="Number">26.95</Data></Cell>
+    <Cell><Data ss:Type="Number">0.679</Data></Cell>
+    <Cell><Data ss:Type="Number">15.68</Data></Cell>
+    <Cell><Data ss:Type="Number">0.5819</Data></Cell>
+    <Cell><Data ss:Type="Number">1.718</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">QGIS</Data></Cell>
+    <Cell><Data ss:Type="Number">14.50</Data></Cell>
+    <Cell><Data ss:Type="Number">5.18</Data></Cell>
+    <Cell><Data ss:Type="Number">9.32</Data></Cell>
+    <Cell><Data ss:Type="Number">0.643</Data></Cell>
+    <Cell><Data ss:Type="Number">15.68</Data></Cell>
+    <Cell><Data ss:Type="Number">1.6815</Data></Cell>
+    <Cell><Data ss:Type="Number">0.5945</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">MST Route Builder</Data></Cell>
+    <Cell><Data ss:Type="Number">56.00</Data></Cell>
+    <Cell><Data ss:Type="Number">10.00</Data></Cell>
+    <Cell><Data ss:Type="Number">46.00</Data></Cell>
+    <Cell><Data ss:Type="Number">0.821</Data></Cell>
+    <Cell><Data ss:Type="Number">15.68</Data></Cell>
+    <Cell><Data ss:Type="Number">0.341</Data></Cell>
+    <Cell><Data ss:Type="Number">2.934</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">Notes</Data></Cell>
+    <Cell ss:MergeAcross="7"><Data ss:Type="String">Remember: AutoCAD LISP tools run per FDH (40–60 FDHs each). Python tools generally run per OLT. Use per-run Time Saved when computing break-even.</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+ <!-- All Tools sheet: include CSV content -->
+ <Worksheet ss:Name="All Tools">
+  <Table>
+   <!-- Header row -->
+   <Row>
+    <Cell><Data ss:Type="String">filename</Data></Cell>
+    <Cell><Data ss:Type="String">type</Data></Cell>
+    <Cell><Data ss:Type="Number">dev_hours</Data></Cell>
+    <Cell><Data ss:Type="Number">test_hours</Data></Cell>
+    <Cell><Data ss:Type="Number">total_hours</Data></Cell>
+    <Cell><Data ss:Type="String">description</Data></Cell>
+    <Cell><Data ss:Type="String">variation_note</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>
