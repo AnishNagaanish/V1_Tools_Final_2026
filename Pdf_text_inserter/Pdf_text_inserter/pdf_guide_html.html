@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Text Inserter - User Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #764ba2;
+        }
+        
+        .icon {
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .step-box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #f39c12;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .step-box h4 {
+            color: #f39c12;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .tip-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .tip-box strong {
+            color: #28a745;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .warning-box strong {
+            color: #f39c12;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .error-box strong {
+            color: #dc3545;
+        }
+        
+        .code-box {
+            background: #282c34;
+            color: #61dafb;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checklist li::before {
+            content: "☐";
+            font-size: 1.5em;
+            color: #28a745;
+            margin-right: 15px;
+        }
+        
+        ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+        
+        ul li {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 PDF Text Inserter</h1>
+            <p>Complete User Guide & Documentation</p>
+            <span class="badge">Version 1.0</span>
+        </div>
+        
+        <div class="content">
+            <!-- Overview Section -->
+            <div class="section">
+                <h2><span class="icon">📋</span>Overview</h2>
+                <p>This powerful tool allows you to insert custom text (date, day, and month) into multiple PDF files simultaneously. The text is placed on white rectangles that intelligently cover any existing content at specified locations.</p>
+                
+                <div class="tip-box">
+                    <strong>💡 Key Benefits:</strong>
+                    <ul>
+                        <li>Process multiple PDFs at once</li>
+                        <li>Automatically covers old text with white backgrounds</li>
+                        <li>Easy-to-use graphical interface</li>
+                        <li>Preserves original PDFs</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Prerequisites Section -->
+            <div class="section">
+                <h2><span class="icon">🔧</span>Prerequisites</h2>
+                
+                <h3>1. Install Python</h3>
+                <div class="step-box">
+                    <h4>Download & Install</h4>
+                    <p>📥 Download Python from: <a href="https://www.python.org/downloads/" target="_blank">https://www.python.org/downloads/</a></p>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ IMPORTANT:</strong> During installation, make sure to check the box that says <strong>"Add Python to PATH"</strong>
+                </div>
+                
+                <h3>2. Verify Installation</h3>
+                <div class="code-box">
+python --version
+                </div>
+                <p>You should see output like: <code>Python 3.11.0</code></p>
+            </div>
+            
+            <!-- Installation Section -->
+            <div class="section">
+                <h2><span class="icon">📦</span>Installation Steps</h2>
+                
+                <div class="step-box">
+                    <h4>Step 1: Create Project Folder</h4>
+                    <p>Create a new folder on your computer (e.g., <code>C:\PDF_Text_Inserter</code>)</p>
+                    <p>Save these two files in this folder:</p>
+                    <ul>
+                        <li><strong>pdf_text_inserter.py</strong> - Main Python script</li>
+                        <li><strong>Run.bat</strong> - Batch file to run the tool</li>
+                    </ul>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 2: First-Time Setup</h4>
+                    <ol>
+                        <li>Double-click <code>Run.bat</code></li>
+                        <li>Wait for automatic PyMuPDF library installation (first time only)</li>
+                        <li>Installation complete!</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- Usage Section -->
+            <div class="section">
+                <h2><span class="icon">🚀</span>How to Use</h2>
+                
+                <div class="step-box">
+                    <h4>Step 1: Prepare Your PDFs</h4>
+                    <ul>
+                        <li>Place all PDF files you want to modify in one folder</li>
+                        <li>Create an empty folder for output files</li>
+                    </ul>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 2: Run the Tool</h4>
+                    <p>Double-click <code>Run.bat</code></p>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 3: Select Input Folder</h4>
+                    <p>Browse and select the folder containing your PDF files, then click "Select Folder"</p>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 4: Select Output Folder</h4>
+                    <p>Browse and select where you want the modified PDFs saved</p>
+                    <div class="tip-box">
+                        <strong>💡 TIP:</strong> Use a different folder than input to keep original files safe!
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 5: Enter Text Information</h4>
+                    <p>Three dialog boxes will appear in sequence:</p>
+                    <ol>
+                        <li><strong>Date Input:</strong> Enter the date (e.g., <code>11/11/2025</code>)</li>
+                        <li><strong>Day Input:</strong> Enter the day (e.g., <code>11</code>)</li>
+                        <li><strong>Month Input:</strong> Enter the month (e.g., <code>November</code>)</li>
+                    </ol>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 6: Wait for Processing</h4>
+                    <p>The tool will process all PDFs. You'll see progress messages in the command window.</p>
+                </div>
+                
+                <div class="step-box">
+                    <h4>Step 7: Complete!</h4>
+                    <p>✅ Check your output folder for the modified PDFs</p>
+                    <p>Press any key to close the window</p>
+                </div>
+            </div>
+            
+            <!-- Text Placement Section -->
+            <div class="section">
+                <h2><span class="icon">📍</span>Text Placement Details</h2>
+                <p>The tool inserts text at these default locations:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Text Type</th>
+                            <th>Page</th>
+                            <th>X Position</th>
+                            <th>Y Position</th>
+                            <th>Rectangle Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Date</strong></td>
+                            <td>1</td>
+                            <td>420</td>
+                            <td>730</td>
+                            <td>100 × 15 pixels</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Day</strong></td>
+                            <td>2</td>
+                            <td>330</td>
+                            <td>122</td>
+                            <td>20 × 18 pixels</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Month</strong></td>
+                            <td>2</td>
+                            <td>420</td>
+                            <td>122</td>
+                            <td>65 × 20 pixels</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Customization Section -->
+            <div class="section">
+                <h2><span class="icon">⚙️</span>Customization Guide</h2>
+                
+                <h3>Change Position</h3>
+                <div class="code-box">
+{"page": 0, "text": date_text, "x": 420, "y": 730, ...}
+#                                    ↑      ↑
+#                                    X      Y coordinates
+                </div>
+                
+                <h3>Change Rectangle Size</h3>
+                <div class="code-box">
+{"rect_width": 100, "rect_height": 15}
+#               ↑                 ↑
+#            Width             Height
+                </div>
+                
+                <h3>Change Text Style</h3>
+                <div class="code-box">
+{"font_size": 12, "bold": True, "italic": False}
+#              ↑        ↑             ↑
+#           Size     Bold?        Italic?
+                </div>
+            </div>
+            
+            <!-- Troubleshooting Section -->
+            <div class="section">
+                <h2><span class="icon">❗</span>Troubleshooting</h2>
+                
+                <div class="error-box">
+                    <strong>Problem:</strong> "Python is not installed or not in PATH"<br>
+                    <strong>Solution:</strong>
+                    <ul>
+                        <li>Reinstall Python</li>
+                        <li>Check "Add Python to PATH" during installation</li>
+                    </ul>
+                </div>
+                
+                <div class="error-box">
+                    <strong>Problem:</strong> "Failed to install PyMuPDF"<br>
+                    <strong>Solution:</strong>
+                    <ul>
+                        <li>Open Command Prompt as Administrator</li>
+                        <li>Run: <code>pip install PyMuPDF</code></li>
+                    </ul>
+                </div>
+                
+                <div class="error-box">
+                    <strong>Problem:</strong> No dialog boxes appear<br>
+                    <strong>Solution:</strong>
+                    <ul>
+                        <li>Check if antivirus is blocking the script</li>
+                        <li>Run Run.bat as Administrator</li>
+                    </ul>
+                </div>
+                
+                <div class="error-box">
+                    <strong>Problem:</strong> Text appears in wrong location<br>
+                    <strong>Solution:</strong>
+                    <ul>
+                        <li>Open one PDF to check exact coordinates</li>
+                        <li>Edit x and y values in pdf_text_inserter.py</li>
+                    </ul>
+                </div>
+                
+                <div class="error-box">
+                    <strong>Problem:</strong> Rectangle doesn't cover all text<br>
+                    <strong>Solution:</strong>
+                    <ul>
+                        <li>Increase rect_width or rect_height values</li>
+                        <li>Edit values in pdf_text_inserter.py</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Important Notes Section -->
+            <div class="section">
+                <h2><span class="icon">📝</span>Important Notes</h2>
+                
+                <div class="warning-box">
+                    <ul>
+                        <li><strong>Original PDFs are NOT modified</strong> - only output folder contains changes</li>
+                        <li><strong>All PDFs in input folder will be processed</strong> - no individual selection needed</li>
+                        <li><strong>Output files have the same names</strong> as input files</li>
+                        <li><strong>White rectangles cover existing content</strong> at specified locations</li>
+                        <li><strong>Page numbers start from 0</strong> (Page 0 = first page)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Quick Reference Section -->
+            <div class="section">
+                <h2><span class="icon">📞</span>Quick Reference Commands</h2>
+                
+                <h3>Install PyMuPDF manually:</h3>
+                <div class="code-box">
+pip install PyMuPDF
+                </div>
+                
+                <h3>Run script manually:</h3>
+                <div class="code-box">
+python pdf_text_inserter.py
+                </div>
+                
+                <h3>Check Python version:</h3>
+                <div class="code-box">
+python --version
+                </div>
+                
+                <h3>Check if PyMuPDF is installed:</h3>
+                <div class="code-box">
+python -c "import fitz; print('PyMuPDF is installed')"
+                </div>
+            </div>
+            
+            <!-- Success Checklist Section -->
+            <div class="section">
+                <h2><span class="icon">✅</span>Success Checklist</h2>
+                
+                <ul class="checklist">
+                    <li>Python installed and in PATH</li>
+                    <li>Both files saved in same folder</li>
+                    <li>Input folder with PDFs ready</li>
+                    <li>Output folder created (can be empty)</li>
+                    <li>Ran Run.bat successfully</li>
+                    <li>Entered date, day, and month correctly</li>
+                    <li>Checked output folder for results</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>PDF Text Inserter</strong> - Version 1.0</p>
+            <p>Last Updated: November 2025</p>
+            <p style="margin-top: 15px;">
+                <a href="#" class="btn">📧 Get Support</a>
+                <a href="#" class="btn">📖 Documentation</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

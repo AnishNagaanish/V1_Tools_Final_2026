@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced PDF Merger & Page Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .number-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .pdf-list {
+            margin-top: 20px;
+        }
+        
+        .pdf-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .pdf-item-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .pdf-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .pdf-label {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 60px;
+        }
+        
+        input[type="file"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .merge-button {
+            width: 100%;
+            background: #28a745;
+            padding: 15px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .merge-button:hover {
+            background: #218838;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #1976d2;
+        }
+        
+        /* Page Builder Styles */
+        .page-builder {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .source-pdfs {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .output-preview {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #28a745;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .source-pdf-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .source-pdf-name {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+        }
+        
+        .page-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .page-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .page-card.selected {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .page-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .page-number {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .output-page-card {
+            background: #e8f5e9;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: move;
+        }
+        
+        .output-page-card:hover {
+            background: #c8e6c9;
+        }
+        
+        .drag-handle {
+            font-size: 20px;
+            color: #999;
+            cursor: move;
+        }
+        
+        .page-info {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .page-source {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .remove-page-btn {
+            background: #dc3545;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .remove-page-btn:hover {
+            background: #c82333;
+        }
+        
+        .add-pdf-btn {
+            background: #17a2b8;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .add-pdf-btn:hover {
+            background: #138496;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .insert-position {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 4px 0;
+            text-align: center;
+            font-size: 12px;
+            color: #856404;
+            cursor: pointer;
+        }
+        
+        .insert-position:hover {
+            background: #ffe69c;
+        }
+        
+        .filename-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .filename-input input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 Advanced PDF Merger & Page Editor</h1>
+        <p class="subtitle">Merge entire PDFs or insert specific pages anywhere you want!</p>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('simple')">Simple Merge</button>
+            <button class="tab" onclick="switchTab('page-builder')">Page-by-Page Builder</button>
+        </div>
+        
+        <!-- Simple Merge Tab -->
+        <div id="simple" class="tab-content active">
+            <div class="input-section">
+                <div class="number-input">
+                    <label style="margin: 0;">Number of PDFs:</label>
+                    <input type="number" id="numPdfs" min="2" max="20" value="2">
+                    <button onclick="generateSimpleInputs()">Generate Fields</button>
+                </div>
+                
+                <div id="simplePdfInputs" class="pdf-list"></div>
+                
+                <div class="info-box">
+                    ℹ️ Select the radio button (○) next to the PDF whose filename you want to use for output.
+                </div>
+            </div>
+            
+            <button class="merge-button" onclick="simpleMerge()">🔗 Merge PDFs</button>
+        </div>
+        
+        <!-- Page Builder Tab -->
+        <div id="page-builder" class="tab-content">
+            <div class="info-box">
+                📌 <strong>How to use:</strong><br>
+                1. Add PDFs to load their pages<br>
+                2. Click on any page to add it to the output<br>
+                3. Drag pages in the output to reorder them<br>
+                4. Click "Insert Here" buttons to add pages at specific positions<br>
+                5. Remove unwanted pages with the 🗑 button
+            </div>
+            
+            <div class="page-builder">
+                <div class="source-pdfs">
+                    <div class="section-title">📚 Source PDFs</div>
+                    <button class="add-pdf-btn" onclick="addSourcePdf()">➕ Add PDF</button>
+                    <div id="sourcePdfList"></div>
+                </div>
+                
+                <div class="output-preview">
+                    <div class="section-title">📑 Output Pages (Drag to reorder)</div>
+                    <div id="outputPageList">
+                        <div class="empty-state">
+                            <div class="empty-icon">📄</div>
+                            <p>Click pages from source PDFs to add them here</p>
+                        </div>
+                    </div>
+                    <div class="filename-input">
+                        <label style="font-weight: 600;">Output filename:</label>
+                        <input type="text" id="outputFilename" placeholder="merged.pdf" value="merged.pdf">
+                    </div>
+                </div>
+            </div>
+            
+            <button class="merge-button" onclick="buildCustomPdf()">🔗 Create PDF</button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing PDFs, please wait...</p>
+        </div>
+        
+        <div class="success" id="success"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        const { PDFDocument } = PDFLib;
+        let simplePdfFiles = [];
+        let sourcePdfs = [];
+        let outputPages = [];
+        let pdfCounter = 0;
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Simple Merge Functions
+        function generateSimpleInputs() {
+            const num = parseInt(document.getElementById('numPdfs').value);
+            if (num < 2 || num > 20) {
+                alert('Please enter a number between 2 and 20');
+                return;
+            }
+
+            const container = document.getElementById('simplePdfInputs');
+            container.innerHTML = '';
+            simplePdfFiles = new Array(num).fill(null);
+
+            for (let i = 0; i < num; i++) {
+                const div = document.createElement('div');
+                div.className = 'pdf-item';
+                div.innerHTML = `
+                    <div class="pdf-item-header">
+                        <input type="radio" name="simpleSelectedPdf" value="${i}" ${i === 0 ? 'checked' : ''}>
+                        <span class="pdf-label">PDF ${i + 1}:</span>
+                        <input type="file" accept=".pdf" onchange="handleSimpleFileSelect(${i}, this)">
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function handleSimpleFileSelect(index, input) {
+            if (input.files && input.files[0]) {
+                simplePdfFiles[index] = input.files[0];
+            }
+        }
+
+        async function simpleMerge() {
+            hideMessages();
+            
+            for (let i = 0; i < simplePdfFiles.length; i++) {
+                if (!simplePdfFiles[i]) {
+                    showError(`Please select PDF ${i + 1}`);
+                    return;
+                }
+            }
+
+            showLoading();
+
+            try {
+                const mergedPdf = await PDFDocument.create();
+
+                for (let i = 0; i < simplePdfFiles.length; i++) {
+                    const fileBuffer = await simplePdfFiles[i].arrayBuffer();
+                    const pdf = await PDFDocument.load(fileBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    copiedPages.forEach((page) => mergedPdf.addPage(page));
+                }
+
+                const selectedIndex = parseInt(document.querySelector('input[name="simpleSelectedPdf"]:checked').value);
+                const fileName = simplePdfFiles[selectedIndex].name;
+                
+                await downloadPdf(mergedPdf, fileName);
+                hideLoading();
+                showSuccess(`✅ PDFs merged successfully! File downloaded as: ${fileName}`);
+
+            } catch (error) {
+                hideLoading();
+                showError(`Failed to merge PDFs: ${error.message}`);
+            }
+        }
+
+        // Page Builder Functions
+        function addSourcePdf() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.pdf';
+            input.onchange = async (e) => {
+                if (e.target.files[0]) {
+                    await loadSourcePdf(e.target.files[0]);
+                }
+            };
+            input.click();
+        }
+
+        async function loadSourcePdf(file) {
+            try {
+                showLoading();
+                const fileBuffer = await file.arrayBuffer();
+                const pdf = await PDFDocument.load(fileBuffer);
+                const pageCount = pdf.getPageCount();
+                
+                const pdfData = {
+                    id: pdfCounter++,
+                    file: file,
+                    pdf: pdf,
+                    pageCount: pageCount
+                };
+                
+                sourcePdfs.push(pdfData);
+                renderSourcePdfs();
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                showError(`Failed to load PDF: ${error.message}`);
+            }
+        }
+
+        function renderSourcePdfs() {
+            const container = document.getElementById('sourcePdfList');
+            
+            if (sourcePdfs.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No PDFs loaded yet</p></div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            sourcePdfs.forEach((pdfData, pdfIndex) => {
+                const div = document.createElement('div');
+                div.className = 'source-pdf-item';
+                
+                const pages = [];
+                for (let i = 0; i < pdfData.pageCount; i++) {
+                    pages.push(`
+                        <div class="page-card" onclick="addPageToOutput(${pdfIndex}, ${i})">
+                            <div class="page-icon">📄</div>
+                            <div class="page-number">Page ${i + 1}</div>
+                        </div>
+                    `);
+                }
+                
+                div.innerHTML = `
+                    <div class="source-pdf-name">${pdfData.file.name} (${pdfData.pageCount} pages)</div>
+                    <div class="pages-grid">
+                        ${pages.join('')}
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function addPageToOutput(pdfIndex, pageIndex, insertAtIndex = null) {
+            const pageData = {
+                pdfIndex: pdfIndex,
+                pageIndex: pageIndex,
+                pdfName: sourcePdfs[pdfIndex].file.name
+            };
+            
+            if (insertAtIndex !== null) {
+                outputPages.splice(insertAtIndex, 0, pageData);
+            } else {
+                outputPages.push(pageData);
+            }
+            
+            renderOutputPages();
+        }
+
+        function renderOutputPages() {
+            const container = document.getElementById('outputPageList');
+            
+            if (outputPages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📄</div>
+                        <p>Click pages from source PDFs to add them here</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            // Add insert position at the beginning
+            const insertTop = document.createElement('div');
+            insertTop.className = 'insert-position';
+            insertTop.textContent = '⬇ Click to insert page here';
+            insertTop.onclick = () => showInsertDialog(0);
+            container.appendChild(insertTop);
+            
+            outputPages.forEach((pageData, index) => {
+                const div = document.createElement('div');
+                div.className = 'output-page-card';
+                div.draggable = true;
+                div.ondragstart = (e) => handleDragStart(e, index);
+                div.ondragover = handleDragOver;
+                div.ondrop = (e) => handleDrop(e, index);
+                
+                div.innerHTML = `
+                    <span class="drag-handle">⋮⋮</span>
+                    <div class="page-info">
+                        <div><strong>Position ${index + 1}</strong> - Page ${pageData.pageIndex + 1}</div>
+                        <div class="page-source">From: ${pageData.pdfName}</div>
+                    </div>
+                    <button class="remove-page-btn" onclick="removePageFromOutput(${index})">🗑</button>
+                `;
+                
+                container.appendChild(div);
+                
+                // Add insert position after each page
+                const insertAfter = document.createElement('div');
+                insertAfter.className = 'insert-position';
+                insertAfter.textContent = '⬇ Click to insert page here';
+                insertAfter.onclick = () => showInsertDialog(index + 1);
+                container.appendChild(insertAfter);
+            });
+        }
+
+        function showInsertDialog(position) {
+            if (sourcePdfs.length === 0) {
+                showError('Please add source PDFs first');
+                return;
+            }
+            
+            let pdfOptions = sourcePdfs.map((pdf, idx) => 
+                `<option value="${idx}">${pdf.file.name}</option>`
+            ).join('');
+            
+            const dialog = document.createElement('div');
+            dialog.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 1000;';
+            dialog.innerHTML = `
+                <h3 style="margin-bottom: 20px;">Insert Page at Position ${position + 1}</h3>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Select PDF:</label>
+                    <select id="insertPdfSelect" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 5px;">
+                        ${pdfOptions}
+                    </select>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Page Number:</label>
+                    <input type="number" id="insertPageNumber" min="1" value="1" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="confirmInsert(${position})" style="flex: 1; background: #28a745; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Insert</button>
+                    <button onclick="closeInsertDialog()" style="flex: 1; background: #dc3545; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
+                </div>
+            `;
+            
+            const overlay = document.createElement('div');
+            overlay.id = 'insertOverlay';
+            overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;';
+            overlay.onclick = closeInsertDialog;
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(dialog);
+            window.currentInsertDialog = dialog;
+        }
+
+        function confirmInsert(position) {
+            const pdfIndex = parseInt(document.getElementById('insertPdfSelect').value);
+            const pageNumber = parseInt(document.getElementById('insertPageNumber').value);
+            const pageIndex = pageNumber - 1;
+            
+            if (pageIndex < 0 || pageIndex >= sourcePdfs[pdfIndex].pageCount) {
+                showError(`Invalid page number. PDF has ${sourcePdfs[pdfIndex].pageCount} pages.`);
+                return;
+            }
+            
+            addPageToOutput(pdfIndex, pageIndex, position);
+            closeInsertDialog();
+        }
+
+        function closeInsertDialog() {
+            const overlay = document.getElementById('insertOverlay');
+            if (overlay) overlay.remove();
+            if (window.currentInsertDialog) window.currentInsertDialog.remove();
+        }
+
+        function removePageFromOutput(index) {
+            outputPages.splice(index, 1);
+            renderOutputPages();
+        }
+
+        let draggedIndex = null;
+
+        function handleDragStart(e, index) {
+            draggedIndex = index;
+            e.target.style.opacity = '0.5';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e, dropIndex) {
+            e.preventDefault();
+            if (draggedIndex !== null && draggedIndex !== dropIndex) {
+                const [draggedItem] = outputPages.splice(draggedIndex, 1);
+                outputPages.splice(dropIndex, 0, draggedItem);
+                renderOutputPages();
+            }
+            draggedIndex = null;
+        }
+
+        async function buildCustomPdf() {
+            hideMessages();
+            
+            if (outputPages.length === 0) {
+                showError('Please add at least one page to the output');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const mergedPdf = await PDFDocument.create();
+
+                for (const pageData of outputPages) {
+                    const sourcePdf = sourcePdfs[pageData.pdfIndex].pdf;
+                    const [copiedPage] = await mergedPdf.copyPages(sourcePdf, [pageData.pageIndex]);
+                    mergedPdf.addPage(copiedPage);
+                }
+
+                let fileName = document.getElementById('outputFilename').value.trim();
+                if (!fileName) fileName = 'merged.pdf';
+                if (!fileName.endsWith('.pdf')) fileName += '.pdf';
+                
+                await downloadPdf(mergedPdf, fileName);
+                hideLoading();
+                showSuccess(`✅ PDF created successfully with ${outputPages.length} pages! Downloaded as: ${fileName}`);
+
+            } catch (error) {
+                hideLoading();
+                showError(`Failed to create PDF: ${error.message}`);
+            }
+        }
+
+        // Helper Functions
+        async function downloadPdf(pdfDoc, fileName) {
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideMessages() {
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+        }
+
+        // Initialize
+        generateSimpleInputs();
+    </script>
+</body>
+</html>
