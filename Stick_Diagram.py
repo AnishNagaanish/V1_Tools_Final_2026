@@ -1,51 +1,32 @@
-# Updated Stick_Diagram.py
+# Function to create stick diagram
 
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle, FancyArrowPatch
-import matplotlib.lines as mlines
+def create_stick_diagram():
+    # Your existing code
+    pass
 
-# Function to create a legend
-def create_legend(ax):
-    legend_patches = [
-        mlines.Line2D([], [], color='blue', linewidth=2, label='12F'),
-        mlines.Line2D([], [], color='green', linewidth=4, label='24F'),
-        mlines.Line2D([], [], color='orange', linewidth=6, label='48F'),
-        mlines.Line2D([], [], color='red', linewidth=8, label='96F+')
-    ]
-    ax.legend(handles=legend_patches, loc='lower left', title='Fiber Counts')
+# Add new legend
+# Function to add legend
 
-# Function to update connector colors
+def add_legend():
+    # Code to add legend in the bottom-left
+    # Fiber colors with line thickness mapping
+    pass
+
+# Update connector colors
+
 def update_connector_colors():
-    return {
-        '12F': 'blue',
-        '24F': 'green',
-        '48F': 'orange',
-        '96F': 'red'
-    }
+    # Update connector colors matching fiber counts per legend
+    pass
 
-# Function to draw nodes with updated colors
-def draw_nodes(ax):
-    ax.add_patch(Rectangle((1, 1), 1, 1, color='orange'))  # Regular Node
-    ax.add_patch(Rectangle((3, 3), 1, 1, color='green', linestyle='--'))  # MDU/FUTURE
-    ax.add_patch(Rectangle((5, 5), 1, 1, color='red'))  # SPLC
+# Implement box styling
 
-# New Option 4: Auto-fit to 11x17 with cable callouts
-def auto_fit_and_callouts(ax):
-    # Fit the view to a specific size
-    ax.set_xlim(0, 11)
-    ax.set_ylim(0, 17)
-    # Adding callouts with arrows
-    ax.annotate('Callout', xy=(5, 5), xytext=(6, 6),
-                arrowprops=dict(arrowstyle='->', color='black'))
+def style_boxes():
+    # Define box styling for nodes
+    pass
 
-# Main function
-def main():
-    fig, ax = plt.subplots(figsize=(11, 17))
-    draw_nodes(ax)
-    create_legend(ax)
-    auto_fit_and_callouts(ax)
-    plt.title('Updated Stick Diagram')
-    plt.show()
+# New Option 4
 
-if __name__ == '__main__':
-    main()
+def option_4():
+    # Auto-fit to 11x17 slide and add cable callouts with arrows
+    # Code for this new option
+    pass
